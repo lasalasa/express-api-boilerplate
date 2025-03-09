@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../v1/modules/users/model'); // Import User model
 
-// 🔹 Middleware to verify JWT token
+// Middleware to verify JWT token
 exports.authenticateUser = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -22,7 +22,7 @@ exports.authenticateUser = async (req, res, next) => {
   }
 };
 
-// 🔹 Middleware for role-based authorization
+// Middleware for role-based authorization
 exports.authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -32,7 +32,7 @@ exports.authorizeRoles = (...roles) => {
   };
 };
 
-// 🔹 Generate JWT Token
+// Generate JWT Token
 exports.generateToken = (user) => {
   return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: '1d' // Token expires in 1 day

@@ -104,6 +104,14 @@ docker run -p 3000:3000 express-api
 - ✅ Add **Docker support** for containerized deployment.
 - ✅ Implement **CI/CD pipeline with GitHub Actions**.
 
+## 📚 References
+- [Express.js Documentation](https://expressjs.com/)
+- [MongoDB Documentation](https://www.mongodb.com)
+- [JWT Authentication](https://jwt.io/introduction/)
+- [Swagger Documentation](https://swagger.io/docs/)
+- [Node.js](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs)
+- [Jest Testing](https://jestjs.io/docs/getting-started)
+
 ## 📝 License
 This project is licensed under the **MIT License**.
 

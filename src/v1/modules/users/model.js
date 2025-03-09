@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs'); // For password hashing
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -18,7 +18,8 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Password is required'],
-      minlength: 6
+      minlength: 6,
+      select: false
     },
     role: {
       type: String,
@@ -31,19 +32,28 @@ const UserSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true // Automatically adds createdAt and updatedAt timestamps
+    timestamps: true
   }
 );
 
-// 🔹 Hash password before saving
+// Hash password before saving
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-// 🔹 Compare passwords for login
+UserSchema.post('save', function (doc, next) {
+  if (doc.password) {
+    doc.password = undefined;
+  }
+  next();
+});
+
+
+// Compare passwords for login
 UserSchema.methods.comparePassword = async function (password) {
+  if (!this.password) throw new Error('Password is not set');
   return await bcrypt.compare(password, this.password);
 };
 

@@ -103,9 +103,6 @@ typings/
 # dotenv environment variables file
 .env
 
-# do not debug configuration
-.vscode
-
 # api documentation
 public/
 

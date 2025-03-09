@@ -9,6 +9,67 @@ tags:
     description: Endpoints related to user operations.
 
 paths:
+  /api/v1/users/login:
+    post:
+      summary: User login
+      tags:
+        - User Management
+      description: Logs in a user and returns a JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "john@example.com"
+                password:
+                  type: string
+                  example: "securepassword123"
+      responses:
+        "200":
+          description: Login successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1..."
+        "401":
+          description: Unauthorized - Invalid credentials.
+
+  /api/v1/users/me:
+    get:
+      summary: Get current logged-in user
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      description: Retrieves the currently authenticated user's details.
+      responses:
+        "200":
+          description: Successfully retrieved user profile.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "12345"
+                  name:
+                    type: string
+                    example: "John Doe"
+                  email:
+                    type: string
+                    example: "john@example.com"
+        "401":
+          description: Unauthorized - Invalid or missing token.
+
   /api/v1/users:
     get:
       summary: Get all users
@@ -166,67 +227,6 @@ paths:
           description: User not found.
         "403":
           description: Forbidden - Only accessible by admins.
-        "401":
-          description: Unauthorized - Invalid or missing token.
-
-  /api/v1/users/login:
-    post:
-      summary: User login
-      tags:
-        - User Management
-      description: Logs in a user and returns a JWT token.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: "john@example.com"
-                password:
-                  type: string
-                  example: "securepassword123"
-      responses:
-        "200":
-          description: Login successful.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    example: "eyJhbGciOiJIUzI1..."
-        "401":
-          description: Unauthorized - Invalid credentials.
-
-  /api/v1/users/me:
-    get:
-      summary: Get current logged-in user
-      tags:
-        - User Management
-      security:
-        - BearerAuth: []
-      description: Retrieves the currently authenticated user's details.
-      responses:
-        "200":
-          description: Successfully retrieved user profile.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: "12345"
-                  name:
-                    type: string
-                    example: "John Doe"
-                  email:
-                    type: string
-                    example: "john@example.com"
         "401":
           description: Unauthorized - Invalid or missing token.
 

@@ -11,9 +11,21 @@ exports.loginUser = async (req, res) => {
     }
 
     const token = authMiddleware.generateToken(user);
-    res.status(200).json({ token, user });
+
+    const userWithoutPassword = user.toObject();
+    delete userWithoutPassword.password;
+
+    res.status(200).json({ token, userWithoutPassword });
   } catch (error) {
     res.status(500).json({ message: 'Login failed', error: error.message });
+  }
+};
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+    res.status(200).json(req.user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching current user', error: error.message });
   }
 };
 

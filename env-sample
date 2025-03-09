@@ -1,0 +1,11 @@
+# Server Configuration
+PORT=3000
+
+# MongoDB Connection
+MONGO_URI=mongodb://localhost:27017/express_api_boilerplate
+
+# JWT Secret for Authentication (if needed)
+JWT_SECRET=my_super_secret_key
+
+# Logging Level (info, warn, error)
+LOG_LEVEL=info

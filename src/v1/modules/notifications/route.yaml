@@ -67,6 +67,8 @@ paths:
   /api/v1/notifications/{id}:
     get:
       summary: Get notification details
+      tags:
+        - Notification Management
       description: Retrieves details of a specific notification.
       parameters:
         - in: path

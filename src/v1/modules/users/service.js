@@ -9,6 +9,10 @@ class UserService {
     return await UserRepository.findById(id);
   }
 
+  async getUserByEmail(email) {
+    return await UserRepository.findByEmail(email);
+  }
+
   async createUser(userData) {
     return await UserRepository.create(userData);
   }

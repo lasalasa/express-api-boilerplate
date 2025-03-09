@@ -1,0 +1,102 @@
+openapi: 3.0.0
+info:
+  title: Notification API
+  version: 1.0.0
+paths:
+  /api/v1/notifications/send:
+    post:
+      summary: Send a notification
+      tags:
+        - Notification Management
+      description: Sends an email, SMS, or push notification to a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "12345"
+                type:
+                  type: string
+                  enum: ["email", "sms", "push"]
+                  example: "email"
+                message:
+                  type: string
+                  example: "Your payment has been processed successfully."
+      responses:
+        "200":
+          description: Notification sent successfully.
+        "400":
+          description: Invalid notification data.
+
+  /api/v1/notifications:
+    get:
+      summary: Get all notifications
+      tags:
+        - Notification Management
+      description: Retrieves a list of all notifications sent to users.
+      responses:
+        "200":
+          description: A list of notifications.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "notif123"
+                    userId:
+                      type: string
+                      example: "12345"
+                    type:
+                      type: string
+                      example: "email"
+                    message:
+                      type: string
+                      example: "Your order has been shipped."
+                    status:
+                      type: string
+                      example: "delivered"
+
+  /api/v1/notifications/{id}:
+    get:
+      summary: Get notification details
+      description: Retrieves details of a specific notification.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          example: "notif123"
+      responses:
+        "200":
+          description: Notification details retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "notif123"
+                  userId:
+                    type: string
+                    example: "12345"
+                  type:
+                    type: string
+                    example: "sms"
+                  message:
+                    type: string
+                    example: "Your OTP code is 123456."
+                  status:
+                    type: string
+                    example: "delivered"
+        "404":
+          description: Notification not found.

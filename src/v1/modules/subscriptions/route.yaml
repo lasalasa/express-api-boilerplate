@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  title: Subscription API
+  version: 1.0.0
+paths:
+  /api/v1/subscriptions/subscribe:
+    post:
+      summary: Subscribe a user to a plan
+      tags:
+        - Subscription Management
+      description: Registers a user for a subscription plan.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "12345"
+                plan:
+                  type: string
+                  example: "premium"
+      responses:
+        "201":
+          description: User successfully subscribed.
+        "400":
+          description: Missing required subscription details.
+  /api/v1/subscriptions/{id}:
+    get:
+      summary: Get subscription details
+      tags:
+        - Subscription Management
+      description: Retrieves details of a user's subscription.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          example: "sub123"
+      responses:
+        "200":
+          description: Subscription details retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "sub123"
+                  plan:
+                    type: string
+                    example: "premium"
+                  status:
+                    type: string
+                    example: "active"
+        "404":
+          description: Subscription not found.

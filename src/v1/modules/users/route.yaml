@@ -1,0 +1,238 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+  description: API for managing users, including authentication and role-based access control.
+
+tags:
+  - name: User Management
+    description: Endpoints related to user operations.
+
+paths:
+  /api/v1/users:
+    get:
+      summary: Get all users
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      description: Retrieves a list of all registered users (Admin only).
+      responses:
+        "200":
+          description: Successfully retrieved users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "12345"
+                    name:
+                      type: string
+                      example: "John Doe"
+                    email:
+                      type: string
+                      example: "john@example.com"
+                    role:
+                      type: string
+                      example: "user"
+        "403":
+          description: Forbidden - Only accessible by admins.
+        "401":
+          description: Unauthorized - Invalid or missing token.
+
+    post:
+      summary: Create a new user
+      tags:
+        - User Management
+      description: Registers a new user in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                email:
+                  type: string
+                  example: "john@example.com"
+                password:
+                  type: string
+                  example: "securepassword123"
+      responses:
+        "201":
+          description: User successfully created.
+        "400":
+          description: Bad request, missing required fields.
+
+  /api/v1/users/{id}:
+    get:
+      summary: Get user by ID
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      description: Retrieves a specific user's details.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          example: "12345"
+      responses:
+        "200":
+          description: Successfully retrieved user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "12345"
+                  name:
+                    type: string
+                    example: "John Doe"
+                  email:
+                    type: string
+                    example: "john@example.com"
+        "404":
+          description: User not found.
+        "401":
+          description: Unauthorized - Invalid or missing token.
+
+    put:
+      summary: Update user details
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      description: Updates user details (Admin or the user themselves).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          example: "12345"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Doe Updated"
+                email:
+                  type: string
+                  example: "john.updated@example.com"
+      responses:
+        "200":
+          description: User updated successfully.
+        "404":
+          description: User not found.
+        "403":
+          description: Forbidden - Only accessible by admins or the user.
+        "401":
+          description: Unauthorized - Invalid or missing token.
+
+    delete:
+      summary: Delete a user
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      description: Deletes a user (Admin only).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          example: "12345"
+      responses:
+        "200":
+          description: User deleted successfully.
+        "404":
+          description: User not found.
+        "403":
+          description: Forbidden - Only accessible by admins.
+        "401":
+          description: Unauthorized - Invalid or missing token.
+
+  /api/v1/users/login:
+    post:
+      summary: User login
+      tags:
+        - User Management
+      description: Logs in a user and returns a JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "john@example.com"
+                password:
+                  type: string
+                  example: "securepassword123"
+      responses:
+        "200":
+          description: Login successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1..."
+        "401":
+          description: Unauthorized - Invalid credentials.
+
+  /api/v1/users/me:
+    get:
+      summary: Get current logged-in user
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      description: Retrieves the currently authenticated user's details.
+      responses:
+        "200":
+          description: Successfully retrieved user profile.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "12345"
+                  name:
+                    type: string
+                    example: "John Doe"
+                  email:
+                    type: string
+                    example: "john@example.com"
+        "401":
+          description: Unauthorized - Invalid or missing token.
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
